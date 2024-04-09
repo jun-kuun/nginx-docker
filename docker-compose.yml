@@ -1,0 +1,22 @@
+version: '3.2'
+
+services:
+    web:
+        image: nginx
+        restart: always
+        environment:
+            - NGINX_PORT=80
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./conf.d:/etc/nginx/conf.d:ro
+            - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./config/mime.types:/etc/nginx/mime.types:ro
+            - ./html:/usr/share/nginx/html:ro
+            - ./ssl:/etc/nginx/ssl_cert:ro
+            - ./log:/var/log/nginx:rw
+            # - /etc/ssl/certs:/etc/nginx/ssl:ro
+            # - /var/www/letsencrypt:/var/www/letsencrypt:ro
+            # - /var/log/nginx:/var/log/nginx:rw
+        command: /bin/bash -c "exec nginx -g 'daemon off;'"
